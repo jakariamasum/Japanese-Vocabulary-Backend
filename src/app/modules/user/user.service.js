@@ -9,7 +9,20 @@ const getSingleUserFromDB = async (id) => {
   return result;
 };
 
+const updateUserRoleIntoDB = async (id, payload) => {
+  console.log(payload);
+  const result = await User.findByIdAndUpdate(
+    { _id: id },
+    { role: payload.role },
+    {
+      new: true,
+    }
+  );
+  return result;
+};
+
 module.exports = {
   getAllUsersFromDB,
   getSingleUserFromDB,
+  updateUserRoleIntoDB,
 };
