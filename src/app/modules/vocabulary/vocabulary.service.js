@@ -1,8 +1,34 @@
+const { Lesson } = require("../lesson/lesson.model.js");
 const Vocabulary = require("./vocabulary.model");
 
 const createVocabularyIntoDB = async (payload) => {
-  const result = await Vocabulary.create(payload);
-  return result;
+  const { lessonNo } = payload;
+
+  const session = await Vocabulary.startSession();
+  session.startTransaction();
+
+  try {
+    const vocabulary = await Vocabulary.create([payload], { session });
+
+    const lesson = await Lesson.findOneAndUpdate(
+      { lessonNumber: lessonNo },
+      { $inc: { vocabularyCount: 1 } },
+      { new: true, session }
+    );
+
+    if (!lesson) {
+      throw new Error(`Lesson with lessonNo ${lessonNo} not found`);
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return vocabulary;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
 };
 
 const getAllVocabulariesFromDB = async () => {
