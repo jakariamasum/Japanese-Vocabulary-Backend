@@ -21,6 +21,29 @@ const loginUserIntoDB = async ({ email, password }) => {
   }
 
   const token = jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
+  );
+
+  return {
+    token,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  };
+};
+
+const monitorUserIntoDB = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new AppError(401, "Invalid credentials");
+  }
+
+  const token = jwt.sign(
     { userId: user._id, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
@@ -40,4 +63,5 @@ const loginUserIntoDB = async ({ email, password }) => {
 module.exports = {
   registerUserIntoDB,
   loginUserIntoDB,
+  monitorUserIntoDB,
 };

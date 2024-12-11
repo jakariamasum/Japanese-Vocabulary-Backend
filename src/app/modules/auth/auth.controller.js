@@ -1,6 +1,10 @@
 const catchAsync = require("../../utils/catchAsync");
 const sendResponse = require("../../utils/sendResponse");
-const { registerUserIntoDB, loginUserIntoDB } = require("./auth.service");
+const {
+  registerUserIntoDB,
+  loginUserIntoDB,
+  monitorUserIntoDB,
+} = require("./auth.service");
 
 const registerUser = catchAsync(async (req, res) => {
   try {
@@ -43,8 +47,28 @@ const loginUser = catchAsync(async (req, res) => {
     });
   }
 });
+const monitorUser = catchAsync(async (req, res) => {
+  const email = req.email;
+  console.log(email);
+  try {
+    const result = await monitorUserIntoDB(email);
+    sendResponse(res, {
+      success: true,
+      statusCode: 201,
+      message: "User login sucessfully",
+      data: result,
+    });
+  } catch (error) {
+    sendResponse(res, {
+      success: false,
+      statusCode: error.status || 500,
+      message: error.message,
+    });
+  }
+});
 
 module.exports = {
   registerUser,
   loginUser,
+  monitorUser,
 };
