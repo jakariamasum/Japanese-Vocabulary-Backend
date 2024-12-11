@@ -7,14 +7,20 @@ const {
   deleteVocabulary,
   getVocabulariesByLesson,
 } = require("./vocabulary.controller");
+const {
+  authMiddleware,
+  isAdminMiddleware,
+} = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.post("/", createVocabulary);
-router.get("/", getAllVocabularies);
-router.get("/:id", getSingleVocabulary);
-router.get("/lesson/:lessonNo", getVocabulariesByLesson);
-router.put("/:id", updateVocabulary);
-router.delete("/:id", deleteVocabulary);
+router.get("/:id", authMiddleware, getSingleVocabulary);
+router.get("/lesson/:lessonNo", authMiddleware, getVocabulariesByLesson);
+
+// admin routes
+router.post("/", authMiddleware, isAdminMiddleware, createVocabulary);
+router.get("/", authMiddleware, isAdminMiddleware, getAllVocabularies);
+router.put("/:id", authMiddleware, isAdminMiddleware, updateVocabulary);
+router.delete("/:id", authMiddleware, isAdminMiddleware, deleteVocabulary);
 
 module.exports = { VocabularyRoutes: router };

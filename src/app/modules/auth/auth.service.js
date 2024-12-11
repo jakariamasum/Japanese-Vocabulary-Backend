@@ -33,6 +33,7 @@ const loginUserIntoDB = async ({ email, password }) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      img: user.photoUrl,
     },
   };
 };
@@ -44,7 +45,7 @@ const monitorUserIntoDB = async (email) => {
   }
 
   const token = jwt.sign(
-    { userId: user._id, role: user.role },
+    { id: user._id, role: user.role, email: user.email, img: user.photoUrl },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );

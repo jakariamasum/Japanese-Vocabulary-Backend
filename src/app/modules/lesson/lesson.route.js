@@ -6,12 +6,18 @@ const {
   updateLesson,
   deleteLesson,
 } = require("./lesson.controller");
+const {
+  authMiddleware,
+  isAdminMiddleware,
+} = require("../../middlewares/authMiddleware");
 const router = express.Router();
 
-router.post("/", createLessons);
-router.get("/", getAllLessons);
-router.get("/:id", getSingleLesson);
-router.put("/:id", updateLesson);
-router.delete("/:id", deleteLesson);
+router.get("/", authMiddleware, getAllLessons);
+
+// admin routes
+router.post("/", authMiddleware, isAdminMiddleware, createLessons);
+router.get("/:id", authMiddleware, isAdminMiddleware, getSingleLesson);
+router.put("/:id", authMiddleware, isAdminMiddleware, updateLesson);
+router.delete("/:id", authMiddleware, isAdminMiddleware, deleteLesson);
 
 module.exports = { LessonRoutes: router };

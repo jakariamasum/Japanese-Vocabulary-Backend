@@ -37,6 +37,7 @@ const isAdminMiddleware = (req, res, next) => {
       data: "",
     });
   }
+  console.log("admin verified");
   next();
 };
 // Middleware to check if user is admin

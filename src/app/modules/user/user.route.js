@@ -4,10 +4,16 @@ const {
   getSingleUser,
   updateUserRole,
 } = require("./user.controller");
+const {
+  authMiddleware,
+  isAdminMiddleware,
+} = require("../../middlewares/authMiddleware");
 const router = express.Router();
 
-router.get("/", getAllUsers);
-router.get("/:id", getSingleUser);
-router.put("/:id/role", updateUserRole);
+router.get("/:id", authMiddleware, getSingleUser);
+
+// admin routes
+router.get("/", authMiddleware, isAdminMiddleware, getAllUsers);
+router.put("/:id/role", authMiddleware, isAdminMiddleware, updateUserRole);
 
 module.exports = { UserRoutes: router };
