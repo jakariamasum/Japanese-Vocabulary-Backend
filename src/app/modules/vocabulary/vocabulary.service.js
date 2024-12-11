@@ -39,6 +39,10 @@ const getSingleVocabularyFromDB = async (id) => {
   const result = await Vocabulary.findOne({ _id: id });
   return result;
 };
+const getVocabulariesByLessonFromDB = async (id) => {
+  const result = await Vocabulary.find({ lessonNo: id });
+  return result;
+};
 
 const updateVocabularyIntoDB = async (id, payload) => {
   const result = await Vocabulary.findOneAndUpdate({ _id: id }, payload, {
@@ -57,4 +61,5 @@ module.exports = {
   getSingleVocabularyFromDB,
   updateVocabularyIntoDB,
   deleteVocabularyFromDB,
+  getVocabulariesByLessonFromDB,
 };

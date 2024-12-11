@@ -6,6 +6,7 @@ const {
   getSingleVocabularyFromDB,
   updateVocabularyIntoDB,
   deleteVocabularyFromDB,
+  getVocabulariesByLessonFromDB,
 } = require("./vocabulary.service");
 
 const createVocabulary = catchAsync(async (req, res) => {
@@ -47,6 +48,20 @@ const getSingleVocabulary = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getVocabulariesByLesson = catchAsync(async (req, res) => {
+  const { lessonNo } = req.params;
+  console.log("lesson: ", lessonNo);
+  const result = await getVocabulariesByLessonFromDB(lessonNo);
+  if (!result) {
+    throw new AppError(404, "No Vocabularys found");
+  }
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: "Vocabulary retrived successfully!",
+    data: result,
+  });
+});
 const updateVocabulary = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await updateVocabularyIntoDB(id, req.body);
@@ -78,6 +93,7 @@ module.exports = {
   createVocabulary,
   getAllVocabularies,
   getSingleVocabulary,
+  getVocabulariesByLesson,
   updateVocabulary,
   deleteVocabulary,
 };
