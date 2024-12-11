@@ -1,3 +1,4 @@
+const config = require("../../config");
 const AppError = require("../errors/AppError");
 const handleValidationError = require("../errors/handleValidationError");
 
