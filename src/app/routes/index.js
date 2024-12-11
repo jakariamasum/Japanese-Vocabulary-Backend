@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { UserRoutes } = require("../modules/user/user.route");
 const { AuthRoutes } = require("../modules/auth/auth.route");
+const { LessonRoutes } = require("../modules/lesson/lesson.route");
 
 const moduleRoutes = [
   {
@@ -11,6 +12,10 @@ const moduleRoutes = [
   {
     path: "/users",
     route: UserRoutes,
+  },
+  {
+    path: "/lessons",
+    route: LessonRoutes,
   },
 ];
 
